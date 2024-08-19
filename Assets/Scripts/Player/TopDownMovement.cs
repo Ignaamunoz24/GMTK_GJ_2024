@@ -4,64 +4,91 @@ using UnityEngine;
 
 public class TopDownMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float accelerationTime = 0.1f;  // Tiempo que tarda en alcanzar la velocidad máxima
+    public float velMov;  // Velocidad de movimiento del personaje
+    private Vector2 direccion;  // Dirección de movimiento del personaje
+    private Rigidbody2D rb;  // Referencia al Rigidbody2D del personaje
 
-    private Rigidbody2D rb;
-    private Vector2 moveInput;
-    private Vector2 moveVelocity;
-    private float currentSpeed;
+    private float movX;
+    private float movY;
+    private Animator animator;  // Referencia al Animator del personaje
 
-    void Start()
+    public SpriteRenderer spriteRenderer;  // Referencia al SpriteRenderer del personaje
+    public Color waterColor = Color.blue;  // Color cuando el personaje está en agua
+    private Color originalColor;  // Color original del Sprite
+
+    private bool isInWater = false;  // Indica si el personaje está en agua
+    private bool isInEarth = false;  // Indica si el personaje está en tierra
+
+    private void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        currentSpeed = 0f;
+
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        originalColor = spriteRenderer.color;  // Guarda el color original del Sprite
     }
 
-    void Update()
+    private void Update()
     {
-        // Resetear moveInput a cero antes de evaluar la entrada
-        moveInput = Vector2.zero;
+        // Manejo de movimiento
+        movX = Input.GetAxisRaw("Horizontal");
+        movY = Input.GetAxisRaw("Vertical");
+        animator.SetFloat("movX", movX);
+        animator.SetFloat("movY", movY);
+        direccion = new Vector2(movX, movY).normalized;
 
-        // Obtener la última tecla presionada para dar prioridad a esa dirección
-        if (Input.GetKey(KeyCode.W))
-        {
-            moveInput = Vector2.up;
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            moveInput = Vector2.down;
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            moveInput = Vector2.left;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            moveInput = Vector2.right;
-        }
-
-        // Calcula la velocidad deseada basada en la entrada
-        float targetSpeed = moveInput.magnitude * moveSpeed;
-
-        // Lerp para la aceleración suave
-        currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime / accelerationTime);
-
-        // Calcular la velocidad final del movimiento
-        moveVelocity = moveInput * currentSpeed;
+        // Actualizar parámetros del Animator
+        animator.SetBool("isInWater", isInWater);
+        animator.SetBool("isInEarth", isInEarth);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        // Mueve el personaje solo si hay entrada de movimiento
-        if (moveInput != Vector2.zero)
+        // Aplicar movimiento al Rigidbody2D
+        rb.MovePosition(rb.position + direccion * velMov * Time.fixedDeltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Detectar si el personaje entra en agua o tierra
+        if (other.CompareTag("water"))
         {
-            rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
+            isInWater = true;
+        }
+        else if (other.CompareTag("earth"))
+        {
+            isInEarth = true;
+        }
+        UpdateSpriteColor();
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // Detectar si el personaje sale del agua o tierra
+        if (other.CompareTag("water"))
+        {
+            isInWater = false;
+        }
+        else if (other.CompareTag("earth"))
+        {
+            isInEarth = false;
+        }
+        UpdateSpriteColor();
+    }
+
+    private void UpdateSpriteColor()
+    {
+        // Cambiar el color del sprite según las condiciones
+        if (isInWater && !isInEarth)
+        {
+            spriteRenderer.color = waterColor;
         }
         else
         {
-            // Frenar en seco al dejar de presionar el botón
-            currentSpeed = 0f;
+            spriteRenderer.color = originalColor;
         }
     }
 }
