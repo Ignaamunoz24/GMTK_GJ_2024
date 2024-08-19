@@ -13,7 +13,10 @@ public class PiranaController : MonoBehaviour
 
     Vector2 moveDirection;
 
+<<<<<<< HEAD
     public Material abajo;
+=======
+>>>>>>> 85bc7233d111051d06ac6a48d24322eaaabcca5c
     bool onWater;
 
 
@@ -21,12 +24,17 @@ public class PiranaController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         nextAttack = Time.time;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 85bc7233d111051d06ac6a48d24322eaaabcca5c
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("water"))
         {
+<<<<<<< HEAD
             onWater = true;
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.color = Color.blue;
@@ -36,6 +44,15 @@ public class PiranaController : MonoBehaviour
             onWater = false;
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.color = Color.white;
+=======
+            Debug.Log("en agua");
+            onWater = true;
+        }
+        else if(collision.CompareTag("earth"))
+        {
+            Debug.Log("atacando");
+            onWater = false;
+>>>>>>> 85bc7233d111051d06ac6a48d24322eaaabcca5c
         }
     }
 
@@ -43,6 +60,7 @@ public class PiranaController : MonoBehaviour
     {
         if (collision.CompareTag("earth"))
         {
+<<<<<<< HEAD
             onWater = true;
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.color = Color.blue;
@@ -52,6 +70,15 @@ public class PiranaController : MonoBehaviour
             onWater = false;
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.color = Color.white;
+=======
+            Debug.Log("en agua");
+            onWater = true;
+        }
+        else if (collision.CompareTag("water"))
+        {
+            Debug.Log("atacando");
+            onWater = false;
+>>>>>>> 85bc7233d111051d06ac6a48d24322eaaabcca5c
         }
     }
 
