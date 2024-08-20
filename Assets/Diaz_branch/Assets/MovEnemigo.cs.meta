@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/Diaz_branch/Assets/MovEnemigo.cs.meta
 guid: ad708e40791594a4596a902420685f90
+========
+guid: 6c1f02205bb204c4ea73737c4da2d9cc
+>>>>>>>> Stashed changes:Assets/Scripts/Player/TopDownMovement.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
