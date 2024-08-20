@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class MovEnemigo : MonoBehaviour
 {
-    public Transform target;
-    public float speed = 2f;
-    private bool shouldMove = true;
+    public Transform target; // Referencia al jugador
+    public float speed = 2f; // Velocidad del enemigo
+    private bool shouldMove = true; // Controla si el enemigo debe moverse
+
+    void Start()
+    {
+        // Ignorar colisiones entre objetos de la capa "Enemy"
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy"));
+    }
 
     void Update()
     {
+        // Mover al enemigo hacia el jugador si debe moverse
         if (target != null && shouldMove)
         {
             Vector3 direction = (target.position - transform.position).normalized;
@@ -19,12 +26,11 @@ public class MovEnemigo : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Trigger detectado con: " + other.name); // Para ver si algo está siendo detectado
+        // Verificar si el enemigo colisiona con el colider del jugador
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Golpe");
-            shouldMove = false;
+            Debug.Log("Golpe"); // Imprimir "Golpe" en la consola
+            shouldMove = false; // Detener el movimiento del enemigo
         }
     }
-
 }
