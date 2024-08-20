@@ -1444,7 +1444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velMov: 3.5
   spriteRenderer: {fileID: 1787306292}
-  waterColor: {r: 0, g: 0, b: 1, a: 1}
+  waterColor: {r: 0, g: 0.6708858, b: 1, a: 1}
 --- !u!1 &1812162741
 GameObject:
   m_ObjectHideFlags: 0
